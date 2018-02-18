@@ -1,0 +1,31 @@
+/**
+ * Write your model definitions here
+ */
+
+namespace org.transfer.tfg
+
+participant User identified by email {
+  o String email
+  o String name
+  o String lastName
+  o String date
+  o String country
+  o String phoneNumber
+  o String password
+  o Double amount optional
+}
+
+transaction createUser {
+  o String email
+  o String name
+  o String lastName
+  o String date
+  o String country
+  o String phoneNumber
+  o String password
+}
+
+transaction login{
+  --> User user
+  o String password
+}
