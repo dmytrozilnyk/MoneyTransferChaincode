@@ -20,7 +20,7 @@ function createUser(user) {
             newUser.date = user.date;
             newUser.country = user.country;
             newUser.phoneNumber = user.phoneNumber;
-            newUser.password = user.password;
+            //newUser.password = user.password;
             return participantRegistry.add(newUser);
           });
       } else {

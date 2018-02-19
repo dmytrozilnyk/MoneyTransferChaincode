@@ -11,7 +11,7 @@ participant User identified by email {
   o String date
   o String country
   o String phoneNumber
-  o String password
+  o String password optional
   o Double amount optional
 }
 
@@ -22,7 +22,7 @@ transaction createUser {
   o String date
   o String country
   o String phoneNumber
-  o String password
+  o String password optional
 }
 
 transaction login{
