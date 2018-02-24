@@ -4,28 +4,27 @@
 
 namespace org.transfer.tfg
 
-participant User identified by email {
+participant User identified by userId {
+  o String userId
   o String email
   o String name
   o String lastName
   o String date
   o String country
   o String phoneNumber
-  o String password optional
   o Double amount optional
 }
 
 transaction createUser {
+  o String userId
   o String email
   o String name
   o String lastName
   o String date
   o String country
   o String phoneNumber
-  o String password optional
 }
 
 transaction login{
   --> User user
-  o String password
 }

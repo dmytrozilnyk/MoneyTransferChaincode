@@ -7,20 +7,19 @@
 function createUser(user) {
   return getParticipantRegistry('org.transfer.tfg.User')
     .then(function (participantRegistry) {
-      return participantRegistry.exists(user.email);
+      return participantRegistry.exists(user.userId);
     })
     .then(function (exists) {
       if (!exists) {
         return getParticipantRegistry('org.transfer.tfg.User')
           .then(function (participantRegistry) {
-            var newUser = getFactory().newResource('org.transfer.tfg', 'User', user.email);
+            var newUser = getFactory().newResource('org.transfer.tfg', 'User', user.userId);
             newUser.name = user.name;
             newUser.lastName = user.lastName;
             newUser.email = user.email;
             newUser.date = user.date;
             newUser.country = user.country;
             newUser.phoneNumber = user.phoneNumber;
-            //newUser.password = user.password;
             return participantRegistry.add(newUser);
           });
       } else {
@@ -38,27 +37,16 @@ function createUser(user) {
 * @transaction
 */
 function login(user) {
-  var password = user.password;
-  var userId = user.user.email
+  var userId = user.user.userId
 
   return getParticipantRegistry('org.transfer.tfg.User')
     .then(function (participantRegistry) {
       return participantRegistry.exists(userId);
     })
     .then(function (exists) {
-      if (exists) {
-        return getParticipantRegistry('org.transfer.tfg.User')
-          .then(function (participantRegistry) {
-            return participantRegistry.get(userId);
-          })
-          .then(function (userAux) {
-            if (password !== userAux.password) {
-              throw new Error("La contraseña no es correcta");
-            }
-          });
-      } else {
+      if (!exists) {
         throw new Error("El usuario no existe");
-      }
+      } 
     })
     .catch(function (error) {
       throw new Error(error);
