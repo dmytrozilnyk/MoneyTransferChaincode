@@ -13,9 +13,10 @@ participant User identified by userId {
   o String country
   o String phoneNumber
   o Double amount optional
+  o String image optional
 }
 
-transaction createUser {
+transaction CreateUser {
   o String userId
   o String email
   o String name
@@ -25,6 +26,11 @@ transaction createUser {
   o String phoneNumber
 }
 
-transaction login{
-  --> User user
+transaction AddProfileFoto{
+	--> User user
+    o String image
+}
+
+transaction Login{
+	--> User user
 }

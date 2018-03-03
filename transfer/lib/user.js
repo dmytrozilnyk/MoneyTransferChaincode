@@ -1,6 +1,6 @@
 /**
  * Creacion de owner y receiver transaction processor function.
- * @param {org.transfer.tfg.createUser} createUser The createUser transaction instance.
+ * @param {org.transfer.tfg.CreateUser} createUser The createUser transaction instance.
  * @transaction
  */
 
@@ -33,7 +33,7 @@ function createUser(user) {
 
 /**
 * Creacion de owner y receiver transaction processor function.
-* @param {org.transfer.tfg.login} login The login transaction instance.
+* @param {org.transfer.tfg.Login} login The login transaction instance.
 * @transaction
 */
 function login(user) {
@@ -46,7 +46,24 @@ function login(user) {
     .then(function (exists) {
       if (!exists) {
         throw new Error("El usuario no existe");
-      } 
+      }
+    })
+    .catch(function (error) {
+      throw new Error(error);
+    });
+}
+
+/**
+* Creacion de owner y receiver transaction processor function.
+* @param {org.transfer.tfg.AddProfileFoto} login The login transaction instance.
+* @transaction
+*/
+function addProfileFoto(user) {
+  var userAux = user.user
+  userAux.image = user.image;
+  return getParticipantRegistry('org.transfer.tfg.User')
+    .then(function (participantRegistry) {
+      return participantRegistry.update(userAux);
     })
     .catch(function (error) {
       throw new Error(error);
