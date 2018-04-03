@@ -1,36 +1,190 @@
-/**
- * Write your model definitions here
- */
-
 namespace org.transfer.tfg
+import org.transfer.base.UserParticipant
+import org.transfer.base.RequestStatus
+import org.transfer.base.OperationType
+import org.transfer.base.Security
 
-participant User identified by userId {
-  o String userId
-  o String email
-  o String name
-  o String lastName
-  o String date
-  o String country
-  o String phoneNumber
-  o Double amount optional
-  o String image optional
+/**--------------------------------------------------------------------------------
+                            Participant
+----------------------------------------------------------------------------------*/
+
+participant User extends UserParticipant {
 }
 
+/**--------------------------------------------------------------------------------
+                            Asset
+----------------------------------------------------------------------------------*/
+
+//Asset of credit card
+asset CreditCard identified by creditCardId{
+    o String creditCardId
+    --> User owner 
+    o String ownerName 
+    o String number
+    o String expireDate
+    o String cvv
+    o DateTime addTime
+}
+//Asset to get information of an operation
+asset Operation identified by operationId{
+    o String  operationId
+    --> User user
+    --> User destination optional
+    --> CreditCard creditCard optional
+    o Double amount
+    o String nameDestination
+    o String nameOrigin
+    o OperationType type
+    o DateTime date
+ }
+ //Asset for the money request
+asset Request identified by requestId{
+    o String requestId
+    --> User origin
+    --> User destination
+    o RequestStatus status
+}
+ //Asset to see when the session has started
+asset LoginInfo identified by loginInfoId{
+    o String loginInfoId
+    --> User user
+    o DateTime loginDate
+}
+ //Asset to see when the session  has been closed
+asset LogoutInfo identified by logoutInfoId{
+    o String logoutInfoId
+    --> User user
+    o DateTime logoutDate
+}
+/**--------------------------------------------------------------------------------
+                            Transaction
+----------------------------------------------------------------------------------*/
+
+//Transaction to create new user
 transaction CreateUser {
-  o String userId
-  o String email
-  o String name
-  o String lastName
-  o String date
-  o String country
-  o String phoneNumber
+    o String userId
+    o String email
+    o String name
+    o String lastName
+    o String date
+    o String country
+    o String phoneNumber
 }
-
-transaction AddProfileFoto{
-	--> User user
-    o String image
+//Transaction to change security options
+transaction SecurityOptions {
+    --> User user
+    o Boolean security
+    o Security securityValue 
 }
-
+//Transaction to update user information
+transaction UpdateProfile{
+    --> User user
+    o String name 
+    o String lastName 
+    o String date 
+    o String country 
+    o String phoneNumber 
+}
+//Transaction to Login
 transaction Login{
-	--> User user
+	  --> User user
+    o DateTime loginDate
+}
+//Transaction to Logout
+transaction Logout{
+    --> User user
+    o DateTime logoutDate
+}
+//Transaction to send money
+transaction SendMoney {
+    --> User origin
+    --> User destination 
+    o Double amount
+    o DateTime date
+}
+//Transaction to request money
+transaction RequestMoney {
+    --> User origin
+    --> User destination 
+    o Double amount
+    o DateTime date
+}
+//Transaction to accept the request
+transaction AcceptRequest {
+    --> Request requestId
+    --> User origin
+    --> User destination 
+    o Double amount
+    o DateTime date
+}
+//Transaction to reject the request
+transaction RejectRequest {
+    --> Request requestId
+    --> User origin
+    --> User destination 
+    o Double amount
+    o DateTime date
+}
+//Transaction to add new CreditCard
+transaction AddCreditCard{
+    --> User owner 
+    o String ownerName 
+    o String number
+    o String expireDate
+    o String cvv
+    o DateTime addTime
+}
+//Transaction to delete specifies CreditCard
+transaction DeleteCreditCard{
+    -->CreditCard creditCard
+}
+//Transaction to deposite money
+transaction DepositMoney {
+    --> User user
+    --> CreditCard creditCard 
+    o Double amount
+    o DateTime date
+}
+//Transaction to deposit money
+transaction WithdrawMoney {
+    --> User user
+    --> CreditCard creditCard 
+    o Double amount
+    o DateTime date
+}
+
+/**--------------------------------------------------------------------------------
+                            Events
+----------------------------------------------------------------------------------*/
+//The event is issued when money is sent
+event SendMoneyEvent{
+    --> User origin
+    --> User destination 
+    o Double amount
+    o String nameDestination
+    o String nameorigin
+}
+//The event is issued when a money request is sent
+event RequestMoneyEvent{
+    --> User origin
+    --> User destination 
+    o Double amount
+    o String nameDestination
+    o String nameorigin
+}
+//The event is issued when the money request is accepted
+event AcceptRequestEvent{
+    --> Request requestId
+    --> User origin
+    --> User destination 
+    o Double amount
+    o String nameDestination
+    o String nameorigin
+}
+//The event is issued when the money request is rejected
+event RejectRequestEvent{
+    --> Request requestId
+    --> User origin
+    --> User destination 
+    o Double amount
 }

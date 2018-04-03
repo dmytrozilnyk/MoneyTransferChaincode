@@ -1,0 +1,45 @@
+namespace org.transfer.base
+
+/**--------------------------------------------------------------------------------
+                            Concepts
+----------------------------------------------------------------------------------*/
+
+concept Security{
+   o Boolean remove
+   o Boolean deposite
+   o Boolean send
+   o Boolean withdraw
+}
+
+/**--------------------------------------------------------------------------------
+                            Abstract
+----------------------------------------------------------------------------------*/
+
+abstract participant UserParticipant identified by userId{
+  o String userId
+  o String email
+  o String name
+  o String lastName
+  o String date
+  o String country
+  o String phoneNumber
+  o Double amount default=0.0
+  o Boolean security default=false 
+  o Security securityValue optional
+}
+
+/**--------------------------------------------------------------------------------
+                            Enums
+----------------------------------------------------------------------------------*/
+
+enum OperationType{
+  o WITHDRAW
+  o DEPOSIT
+  o SENT
+  o REQUEST
+}
+enum RequestStatus{
+  o CREATED
+  o ACCEPTED
+  o REJECTED
+}
