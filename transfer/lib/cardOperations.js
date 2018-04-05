@@ -107,5 +107,50 @@ function depositMoney(info) {
 */
 
 function withdrawMoney(info) {
+    var user = info.user;
+    var creditCard = info.creditCard;
+    var amount = info.amount;
+    user.amount = user.amount - amount;
 
+    return getParticipantRegistry('org.transfer.tfg.User')
+        .then(function (participantRegistry) {
+            return participantRegistry.update(user);
+        })
+        .then(function () {
+            return getAssetRegistry('org.transfer.tfg.CreditCard')
+                .then(function (assetsRegistryCreditCard) {
+                    return assetsRegistryCreditCard.get(creditCard.creditCardId);
+                })
+                .then(function () {
+                    return getAssetRegistry('org.transfer.tfg.Operation')
+                        .then(function (assetsRegistryOperation) {
+                            return assetsRegistryOperation.getAll()
+                                .then(function (allOperation) {
+                                    var operationId = allOperation.length + 1;
+                                    var operation = getFactory().newResource('org.transfer.tfg', 'Operation', operationId.toString());
+                                    operation.user = user;
+                                    operation.creditCard = creditCard;
+                                    operation.amount = amount;
+                                    operation.nameDestination = creditCard.number;;
+                                    operation.nameOrigin = user.name + ' ' + user.lastName;
+                                    operation.type = "WITHDRAW";
+                                    operation.date = info.date;
+
+                                    return assetsRegistryOperation.add(operation);
+                                })
+                                .catch(function (error) {
+                                    throw new Error(error);
+                                });
+                        })
+                        .catch(function (error) {
+                            throw new Error(error);
+                        });
+                })
+                .catch(function (error) {
+                    throw new Error(error);
+                });
+        })
+        .catch(function (error) {
+            throw new Error(error);
+        });
 }

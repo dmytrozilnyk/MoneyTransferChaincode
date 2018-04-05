@@ -42,6 +42,9 @@ asset Request identified by requestId{
     o String requestId
     --> User origin
     --> User destination
+    o String nameDestination
+    o String nameOrigin
+    o Double amount
     o RequestStatus status
 }
  //Asset to see when the session has started
@@ -111,18 +114,12 @@ transaction RequestMoney {
 }
 //Transaction to accept the request
 transaction AcceptRequest {
-    --> Request requestId
-    --> User origin
-    --> User destination 
-    o Double amount
+    --> Request request
     o DateTime date
 }
 //Transaction to reject the request
 transaction RejectRequest {
-    --> Request requestId
-    --> User origin
-    --> User destination 
-    o Double amount
+    --> Request request
     o DateTime date
 }
 //Transaction to add new CreditCard
