@@ -1,6 +1,27 @@
-query Q1{
+query GetUserId{
   description: "Select the especific user"
   statement: 
       SELECT org.transfer.tfg.User
-          WHERE (email==_$email)
+          WHERE (userId ==_$userId)
+}
+
+query GetUserCreditCard{
+   description: "Get all credit card of the espesifical user"
+   statement:
+  		SELECT org.transfer.tfg.CreditCard
+  			WHERE (owner == _$owner)
+}
+
+query GetUserOperations{
+   description: "Get all user operations"
+   statement:
+  		SELECT org.transfer.tfg.Operation
+  			WHERE (user == _$user)
+}
+
+query GetUserRequest{
+   description: "Get all user request"
+   statement:
+  		SELECT org.transfer.tfg.Request
+  			WHERE (destination == _$destination AND status ==_$status)
 }

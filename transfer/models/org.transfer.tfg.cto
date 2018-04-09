@@ -47,18 +47,6 @@ asset Request identified by requestId{
     o Double amount
     o RequestStatus status
 }
- //Asset to see when the session has started
-asset LoginInfo identified by loginInfoId{
-    o String loginInfoId
-    --> User user
-    o DateTime loginDate
-}
- //Asset to see when the session  has been closed
-asset LogoutInfo identified by logoutInfoId{
-    o String logoutInfoId
-    --> User user
-    o DateTime logoutDate
-}
 /**--------------------------------------------------------------------------------
                             Transaction
 ----------------------------------------------------------------------------------*/
@@ -92,11 +80,6 @@ transaction UpdateProfile{
 transaction Login{
 	  --> User user
     o DateTime loginDate
-}
-//Transaction to Logout
-transaction Logout{
-    --> User user
-    o DateTime logoutDate
 }
 //Transaction to send money
 transaction SendMoney {
@@ -133,7 +116,8 @@ transaction AddCreditCard{
 }
 //Transaction to delete specifies CreditCard
 transaction DeleteCreditCard{
-    -->CreditCard creditCard
+    --> User owner 
+    --> CreditCard creditCard
 }
 //Transaction to deposite money
 transaction DepositMoney {

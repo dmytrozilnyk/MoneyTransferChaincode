@@ -85,8 +85,6 @@ function updateProfile(updateProfile) {
 
 function login(user) {
   var userId = user.user.userId;
-
-
   return getParticipantRegistry('org.transfer.tfg.User')
     .then(function (participantRegistry) {
       return participantRegistry.exists(userId);
@@ -94,24 +92,6 @@ function login(user) {
     .then(function (exists) {
       if (!exists) {
         throw new Error("El usuario no existe");
-      }else{
-        return getAssetRegistry('org.transfer.tfg.LoginInfo')
-          .then(function(assertRegistryLoginInfo){
-            return assertRegistryLoginInfo.getAll()
-            .then(function(allLoginInfoAssets){
-              var loginInfoId = allLoginInfoAssets.length + 1;
-              var loginInfo = getFactory().newResource('org.transfer.tfg', 'LoginInfo', loginInfoId.toString());
-              loginInfo.user = user.user;
-              loginInfo.loginDate = user.loginDate;
-              return assertRegistryLoginInfo.add(loginInfo);
-            })
-            .catch(function (error) {
-              throw new Error(error);
-            });
-          })
-          .catch(function (error) {
-            throw new Error(error);
-          });
       }
     })
     .catch(function (error) {
@@ -119,45 +99,5 @@ function login(user) {
     });
 }
 
-/**
-* Logout
-* @param {org.transfer.tfg.Logout} logout The logout transaction instance.
-* @transaction
-*/
-
-function logout(user) {
-  var userId = user.user.userId;
-
-  return getParticipantRegistry('org.transfer.tfg.User')
-    .then(function (participantRegistry) {
-      return participantRegistry.exists(userId);
-    })
-    .then(function (exists) {
-      if (!exists) {
-        throw new Error("El usuario no existe");
-      }else{
-        return getAssetRegistry('org.transfer.tfg.LogoutInfo')
-          .then(function(assertRegistryLogoutInfo){
-            return assertRegistryLogoutInfo.getAll()
-            .then(function(allLogoutInfoAssets){
-              var logoutInfoId = allLogoutInfoAssets.length + 1;
-              var logoutInfo = getFactory().newResource('org.transfer.tfg', 'LogoutInfo', logoutInfoId.toString());
-              logoutInfo.user = user.user;
-              logoutInfo.logoutDate = user.logoutDate;
-              return assertRegistryLogoutInfo.add(logoutInfo);
-            })
-            .catch(function (error) {
-              throw new Error(error);
-            });
-          })
-          .catch(function (error) {
-            throw new Error(error);
-          });
-      }
-    })
-    .catch(function (error) {
-      throw new Error(error);
-    });
-}
 
 
