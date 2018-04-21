@@ -149,8 +149,8 @@ function acceptRequest(acceptRequest) {
                                             operation.user = origin;
                                             operation.destination = destination;
                                             operation.amount = amount;
-                                            operation.nameDestination = destination.name + ' ' + destination.lastName;
-                                            operation.nameOrigin = origin.name + ' ' + origin.lastName;
+                                            operation.nameDestination = origin.name + ' ' + origin.lastName;
+                                            operation.nameOrigin = destination.name + ' ' + destination.lastName ;
                                             operation.type = "REQUEST";
                                             operation.date = acceptRequest.date;
 

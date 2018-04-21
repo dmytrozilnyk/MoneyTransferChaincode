@@ -79,7 +79,6 @@ transaction UpdateProfile{
 //Transaction to Login
 transaction Login{
 	  --> User user
-    o DateTime loginDate
 }
 //Transaction to send money
 transaction SendMoney {

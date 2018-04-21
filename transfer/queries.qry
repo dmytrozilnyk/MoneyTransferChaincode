@@ -16,7 +16,7 @@ query GetUserOperations{
    description: "Get all user operations"
    statement:
   		SELECT org.transfer.tfg.Operation
-  			WHERE (user == _$user)
+  			WHERE (user == _$user OR destination == _$destination)
 }
 
 query GetUserRequest{
